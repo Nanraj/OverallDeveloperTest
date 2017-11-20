@@ -1,0 +1,67 @@
+﻿@using PagedList.Mvc
+@model OverallDeveloperTest.Models.SearchInstagramPhotoViewModel
+@{
+    ViewBag.Title = "Search Flickr Photo";
+}
+
+<h2>@ViewBag.Title</h2>
+<link href="~/Content/bootstrap-image-gallery.css" rel="stylesheet" />
+<link href="~/Content/photos.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+@Html.Partial("AddLocationModal")
+@using (Ajax.BeginForm("SearchFlickrPhoto", "FlickrPhoto", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "webgrid" , OnBegin="showSpinner", OnComplete="hideSpinner"}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="spinner" class="spinner" style="display:none; position:fixed;top:50%;left:50%;margin-left:-50px;margin-top:-50px;text-align:center;z-index:1234;overflow:auto;width:100px;height:100px">
+        <img id="img-spinner" src="~/Content/Images/loading-red.gif" alt="Loading" />
+    </div>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        <div id="overlay" style="position:fixed;top:0;left:0; bottom:0;right:0;height:100%; width:100%; padding:0; background:#000000;opacity:0.3; z-index:101; display:none;"></div>
+        <div id="spinner" style="display: none;"></div>
+        <div class="col-md-2 col-sm-12">
+            @Html.LabelFor(m => m.LocationId, new { @class = "col-md-2 control-label", @style = "text-align:left;" })
+            <span style="float:right; padding:7px">[ <a href="#" id="addNewLocation" title="Add New Location"><span>Add New</span></a> ]</span>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            @Html.DropDownListFor(m => m.LocationId, (SelectList)ViewBag.Locations, "-- Please Select --", new { @class = "form-control" })
+            
+        </div>
+        <div class="col-md-7 col-sm-12">
+            <input type="submit" value="Search" class="btn btn-default" id="btnSearch" />
+        </div>
+    
+        <div style="margin-top: 35px;" id="webgrid">
+           
+           @Html.Partial("FlickrPhotoPartial")              
+        </div>
+       
+      
+    </div>
+
+}
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+@*<script src="~/Scripts/jquery-migrate.js"></script>*@
+<script src="~/Scripts/SearchInstagramPhoto.js"></script>
+@*<script src="~/Scripts/bootstrap-image-gallery.js"></script>*@
+<script src="~/Scripts/_photos.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var askAnExpertLink = $("a[id='addNewLocation']");
+        askAnExpertLink.attr({ "href": "#", "data-toggle": "modal", "data-target": "#ModalAddLocation", "data-backdrop": "static", "data-keyboard": "false" });
+    });
+
+    function showSpinner() {
+        $("#webgrid").html('');
+        $("#spinner").css('display', 'block');
+        $("#overlay").css('display', 'block');
+    };
+
+    function hideSpinner() {
+        $("#spinner").css('display', 'none');
+        $("#overlay").css('display', 'none');
+    };
+
+</script>

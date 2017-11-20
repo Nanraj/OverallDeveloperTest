@@ -1,0 +1,48 @@
+﻿@model OverallDeveloperTest.Models.SearchInstagramPhotoViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+
+    ViewBag.ModalTitle = "Add New Location";
+    ViewBag.ModalId = "ModalAddLocation";
+    ViewBag.ModalWidth = "600px";
+}
+<style type="text/css">
+    .modal{
+        z-index:1100;
+    }
+</style>
+<form method="post" class="form-horizontal" role="form" id="addLocationform" style="z-index:1100;">
+
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Location.Name, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
+            @Html.TextBoxFor(m => m.Location.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" value="Save" class="btn btn-primary" id="btnSave" />
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+
+
+</form>
+<script type="text/javascript">
+
+    $("#btnSave").click(function (event) {
+            var name = $("#Location_Name").val();
+
+            $.ajax({
+                url: "/Location/AddLocation",
+                type: "POST",
+                data: { Name: name },
+                success: function () {
+                    location.reload();
+                }
+            });
+        
+
+        return false;
+    });
+</script>
+

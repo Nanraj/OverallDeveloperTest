@@ -1,0 +1,37 @@
+﻿@using PagedList.Mvc
+@model OverallDeveloperTest.Models.SearchInstagramPhotoViewModel
+<div class="row-fluid" >
+    <div class="span2">
+        <div>
+            @if (Model.FlickrsPhotos.Any())
+            {
+                foreach (var image in Model.FlickrsPhotos)
+                {
+
+                    <div class="photo-div">
+                        <img alt="@image.Title" src="@Url.Content(@image.LargeThumnailURL)" class="photo" onclick="display(this,'@image.OriginalURL');" />
+                    </div>
+                }
+                <br style="clear: both;">
+                <div id="myPager" style="float:left" >
+
+                    @Html.PagedListPager(Model.FlickrsPhotos, page => Url.Action("SearchFlickrPhoto", new { page = page, pageSize = 10, locationId = Model.LocationId }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "webgrid" }))
+                </div>
+                <div style="float:right; padding-right:75px; padding-top:25px;">
+                    <span style="font-size:12pt; color:#428bca">Page @(Model.FlickrsPhotos.PageCount < Model.FlickrsPhotos.PageNumber ? 0 : Model.FlickrsPhotos.PageNumber) of @Model.FlickrsPhotos.PageCount</span>
+                </div>
+            }
+            else
+            {
+                <p style="padding-top:50px; padding-left:25px; font-size:12pt; font-weight:500; color:red;">No Photo Available. Please select a location.</p>
+            }
+        </div>
+     
+    </div>
+</div>
+<div id="divimage" class="modal">
+    <img class="modal-content" id="modalimg">
+    <div id="caption"></div>
+</div>
+
+
