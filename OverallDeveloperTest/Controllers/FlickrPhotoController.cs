@@ -71,7 +71,7 @@ namespace OverallDeveloperTest.Controllers
         public Location GetLocationCoordinate(string locationId)
         {
             var locationList = _LocationRepository.GetLocations(locationId);
-            if (locationList != null)
+            if (locationList != null && locationList.Any())
             {
                 var location = locationList.FirstOrDefault();
                 if (string.IsNullOrEmpty(location.Latitude) || string.IsNullOrEmpty(location.Latitude))
@@ -88,9 +88,9 @@ namespace OverallDeveloperTest.Controllers
             }
             return null;
         }
-        public void GetFlickrPhotoByCoordinate(string lng, string lat, string locationId)
+        public void GetFlickrPhotoByCoordinate(double lng, double lat, string locationId)
         {
-            PhotoCollection photos = _FlickrService.SearchPhotos(double.Parse(lng), double.Parse(lat));
+            PhotoCollection photos = _FlickrService.SearchPhotos(lng, lat);
 
             var photoList = photos.OrderBy(x => x.PhotoId).ToList();
 
@@ -131,7 +131,7 @@ namespace OverallDeveloperTest.Controllers
             var location = GetLocationCoordinate(locationId);
 
             //Get Photos from Flickr
-            GetFlickrPhotoByCoordinate(location.Longitude, location.Latitude, locationId);
+            GetFlickrPhotoByCoordinate(double.Parse(location.Longitude), double.Parse(location.Latitude), locationId);
         }
         #endregion
     }

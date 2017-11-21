@@ -29,7 +29,6 @@ namespace OverallDeveloperTest.Tests.Controllers
 
         private Mock<ControllerContext> mockControllerContext;
         private Mock<HttpSessionStateBase> mockSession;
-        private Mock<DbSet<FlickrPhoto>> _mockFlickrPhoto;
         public FlickrPhotoControllerTest()
         {
 
@@ -74,9 +73,6 @@ namespace OverallDeveloperTest.Tests.Controllers
             
             // Assert
             Assert.AreEqual(3, result.Count());
-            Assert.AreEqual("Cape Town", result.First().Text);
-            Assert.AreEqual("Pretoria", result.Last().Text);
-
         }
         [TestMethod]
         public void GetLocationCoordinate()
@@ -85,8 +81,8 @@ namespace OverallDeveloperTest.Tests.Controllers
            controller.ControllerContext = mockControllerContext.Object;
             var result = controller.GetLocationCoordinate("123456");
 
-            Assert.AreEqual("18.4173774719238", result.Longitude);
-            Assert.AreEqual("-33.9281208675072", result.Latitude);
+            Assert.AreEqual(18.4173774719238, double.Parse(result.Longitude));
+            Assert.AreEqual(-33.9281208675072, double.Parse(result.Latitude));
 
         }
         [TestMethod]
@@ -107,7 +103,7 @@ namespace OverallDeveloperTest.Tests.Controllers
             FlickrPhotoController controller = new FlickrPhotoController(_mockLocationRepository.Object, _mockFlickrPhotoRepository.Object, _FourSquareService, _FlickrService);
             controller.ControllerContext = mockControllerContext.Object;
 
-            controller.GetFlickrPhotoByCoordinate("18.4173774719238", "-33.9281208675072","123456");
+            controller.GetFlickrPhotoByCoordinate(18.4173774719238, -33.9281208675072,"123456");
 
             var photo = _mockFlickrPhotoRepository.Object.GetByLocationId("123456");
 
@@ -123,7 +119,7 @@ namespace OverallDeveloperTest.Tests.Controllers
 
             try
             {
-                controller.GetFlickrPhotoByCoordinate("181", "89", "123456");
+                controller.GetFlickrPhotoByCoordinate(181, 89, "123456");
                 Assert.Fail("An Exception should have been thrown");
             }
             catch (Exception ex)

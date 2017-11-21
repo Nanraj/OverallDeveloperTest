@@ -25,6 +25,7 @@ namespace OverallDeveloperTest.Tests.Controllers
         {
             _mockRepository = new Mock<IRepository>();
             _mockLocation = new Mock<DbSet<Location>>();
+            _mockFlickrPhoto = new Mock<DbSet<FlickrPhoto>>();
             _mockRepository.Setup(x => x.Locations).Returns(_mockLocation.Object);
             _mockRepository.Setup(x => x.FlickrPhotos).Returns(_mockFlickrPhoto.Object);
         }
